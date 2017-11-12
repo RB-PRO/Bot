@@ -1,0 +1,58 @@
+{$CLEO}
+0000: NOP
+repeat
+wait 100
+until samp.Available()
+0B34: samp register_client_command "cmd" to_label @cmd
+// Áîò ïðîñòî èä¸ò â êîðû è óñ¸. by RB_PRO & Kewa_Opcode. Thenk DarkP1xel
+while true
+wait 0
+    if 31@ == 1
+    then 
+    0@ = -587.2751 // X
+    1@ = 2479.3140 // Y
+    2@ = 1741.2828 // Z
+    0AB1: call_scm_func @mq 3 0@ 1@ 2@ // Âûçûâ callscm
+    31@ = 0
+    end
+    
+    if 0ADC:   test_cheat "3"
+    then
+    0A92: create_custom_thread "TEST.cs"
+    0A93: end_custom_thread
+    end
+end
+
+:cmd
+0B12: 31@ = 31@ XOR 1
+if 31@ == 1 
+then
+0ACD: show_text_highpriority "~g~CLEO is ~r~ON~n~~w~Author:~p~ ~>~RB_PRO~<~" time 3000
+else
+0ACD: show_text_highpriority "~g~CLEO is ~r~OFF~n~~w~Author:~p~ ~>~RB_PRO~<~" time 3000
+end
+samp.CmdRet()
+
+// ************************* Call_scm
+
+:mq
+0AB3: var 740 = 0
+0AB4: 10@ = var 740
+Actor.EmulateFromPlayer($PLAYER_ACTOR, $PLAYER_CHAR)
+05D3: AS_actor $PLAYER_ACTOR goto_point 0@ 1@ 2@ mode 6 5000 ms // versionA
+0AB3: var 740 = 1
+wait 500
+29@ = 0   
+0AF8: samp add_message_to_chat "%f %f %f" color -1 0@ 1@ 2@
+    while 29@ == 0
+    actor.StorePos($PLAYER_ACTOR, 4@, 5@, 6@)
+    050A: 11@ = distance_between_XYZ 4@ 5@ 6@ and_XYZ 0@ 1@ 2@
+    wait 0
+        if 11@ < 10.0
+        then
+        0AB3: var 740 = 0
+        0AF8: samp add_message_to_chat "óñ¸" color -1
+        29@ = 1
+        end
+    end
+0AB2: ret 0
